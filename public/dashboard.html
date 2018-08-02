@@ -1,0 +1,272 @@
+<!doctype html>
+
+<!-- ASSIGN OUR ANGULAR MODULE -->
+<html ng-app="Dashboard">
+<head>
+	<!-- META -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"><!-- Optimize mobile viewport -->
+
+	<title>Node/Angular Todo App</title>
+
+	
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+	crossorigin="anonymous">
+	<link rel="stylesheet" href="css/dashboard.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script><!-- load angular -->
+	
+	
+	
+
+	<script type="text/javascript" src="js/controllers/dashboard.controller.js"></script> <!-- load up our controller -->
+	<script type="text/javascript" src="js/services/dashboard.services.js"></script> <!-- load our todo service -->
+	<script type="text/javascript" src="js/core.js"></script> 
+
+	<style type="text/css">
+
+	.order{
+		padding: 10px;
+	}
+
+	.order-border{
+
+		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+		margin-bottom:15px;
+	}
+
+	
+	.details-section{
+		margin-left:300px;
+		margin-top:50px;
+	}
+	.table-main{
+		overflow-y: scroll; 
+		max-height: 75vh;
+		padding: 10px
+	}
+
+	.vieworder{
+
+		font-size: 12px;
+	}
+	.current-Order{
+		padding: 10px;
+		background: green;
+		color: white;
+		border-radius: 2px;
+		text-align: center;
+		margin-bottom: 10px
+
+	}
+	.order-details-header{
+		padding-bottom: 5px;
+		border-bottom: 1px solid #f1f1f1;
+	}
+	.cancel-order{
+		padding: 5px;
+		background: red;
+		border-radius: 2px;
+		color: white;
+		font-size: 12px;
+		cursor: pointer;
+	}
+
+
+
+
+</style>
+
+
+
+
+
+
+
+</head>
+<body ng-controller="dashBoardController" ng-init="initializationDashboard()" >
+
+	<div class="page-wrapper chiller-theme sidebar-bg bg1 toggled">
+		<a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
+			<i class="fas fa-bars"></i>
+		</a>
+		<nav id="sidebar" class="sidebar-wrapper">
+			<div class="sidebar-content">
+				<div class="sidebar-brand">
+					<a href="#">Dashboard</a>
+
+				</div>
+				<div class="sidebar-header">
+					<div class="user-pic">
+						<img class="img-responsive img-rounded"  alt="User picture">
+					</div>
+					<div class="user-info">
+						<span class="user-name">
+							<strong>Baaris</strong>
+						</span>
+						<span class="user-role">Greater Kailash 2 , Delhi</span>
+
+					</div>
+				</div>
+				<!-- sidebar-header  -->
+
+				<!-- sidebar-search  -->
+				<div class="sidebar-menu">
+					<ul>
+						<li class="header-menu">
+							<span>General</span>
+						</li>
+						<li class="sidebar-dropdown">
+							<a href="#">
+								<i class="fa fa-tachometer-alt"></i>
+								<span>Tables</span>
+								<span class="badge badge-pill badge-danger">New</span>
+							</a>
+
+						</li>
+						<li class="sidebar-dropdown">
+							<a href="#">
+								<i class="fa fa-shopping-cart"></i>
+								<span>Orders</span>
+								<span class="badge badge-pill badge-primary">3</span>
+							</a>
+
+						</li>
+
+						<li class="header-menu">
+							<span>Extra</span>
+						</li>
+						<li>
+							<a href="#">
+								<i class="fa fa-calendar"></i>
+								<span>Calendar</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<i class="fa fa-folder"></i>
+								<span>Examples</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<i class="fa fa-book"></i>
+								<span>Documentation</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+				<!-- sidebar-menu  -->
+			</div>
+			<!-- sidebar-content  -->
+
+		</nav>
+
+
+		<!-- page-content" -->
+		<!-- SET THE CONTROLLER -->
+
+		<div class="details-section">
+			<div class="row">
+				<div class="col-md-10">
+					<div class="row">
+						<div class="col-md-4">
+							<h3 class="text-center">Tables</h3>	
+							<div class="table-main">
+
+
+
+								<div class="columns" ng-repeat="table in tablesObj track by $index">
+									<div class="order-border">
+										<div class="order">
+											<div class="row">
+												<div class="col-sm-1">
+													<h3>{{table.table_number}}</h3>
+												</div>
+												<div class="col-sm-7">
+
+													<div class="order-status text-center"> Status : &nbsp
+														<span> 
+														<select ng-model="table.status"  ng-options="status for status  in tableStatus" ng-change=changeTableStatus($index,table.table_number,table.restaurantId)></select>
+
+												</span></div>
+													<div class="order-status text-center"> Total Orders : <strong>{{table.ordersLength}}</strong></div>
+													<div class="order-status text-center" ng-if="table.new"> New Order</div>
+
+												</div>
+												<div class="col-sm-3" style="padding: 0">
+
+
+													<div class="vieworder text-center btn btn-primary"  ng-click="viewOrders(table.table_number)"> View Orders </div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-4">
+							<h3 class="text-center">Orders</h3>	
+							<div class="current-Order"><h4>Current Table : <strong> {{currentTable}}</strong></h4></div>
+							<div class="table-main">
+
+
+								<div class="columns" ng-repeat="order in orders track by $index">
+									<div class="order-border">
+										<div class="order">
+											<div class="row">
+												<div class="col-sm-8">
+													<h6 class="order-details-header">Dish Name</h6>
+													<div class="dish-name" ng-repeat="item in order.orderItems">
+														{{item.dish.name}}
+													</div>
+
+												</div>
+												<div class="col-sm-4">
+													<h6 class="order-details-header">Quantity</h6>
+													<div class="Quantity" ng-repeat="item in order.orderItems"><strong>{{item.count}}</strong></div>
+
+												</div>
+
+											</div>
+											<div style="margin-top: 10px">
+												<div class="row">
+
+													<div class="col-sm-8">
+														<span class="order-details-header"><strong>Status :</strong> &nbsp; &nbsp;  </span>
+														<span> </span>
+
+
+													</div>
+													<div class="col-sm-4">
+
+														<div class=" cancel-order">Cancel Order</div>
+
+													</div>
+
+												</div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+			</div>
+
+			
+		</div>
+
+
+
+
+	</body>
+	</html>
