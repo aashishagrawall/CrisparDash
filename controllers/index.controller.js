@@ -121,8 +121,6 @@ exports.getAllOrder=function(req,res){
 
 exports.getAllTable=function(req,res){
 
-
-
 	 var string="http://139.59.13.122/api/restaurant/" + req.user + "/tables";
    http.get(string, (resp) => {
     let data = '';
@@ -143,6 +141,37 @@ exports.getAllTable=function(req,res){
 });
 
 
+
+}
+
+exports.deleteOrder=function(req,res){
+ 
+  var string="http://139.59.13.122/api/order/" + req.params.id;
+request.delete(string, { json: true }, function(err,httpResponse,body){ 
+if(!err){
+  res.json(body);
+}
+
+
+/* ... */ })
+
+
+}
+
+exports.changeTableStatus=function(req,res){
+  console.log(req.body);
+
+  var string="http://139.59.13.122/api/table/update";
+
+
+request.post({url:string, form: req.body}, function(err,httpResponse,body){ 
+
+  res.json(JSON.parse(body));
+
+
+
+
+/* ... */ })
 
 }
 

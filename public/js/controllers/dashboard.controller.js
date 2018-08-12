@@ -71,17 +71,22 @@ angular.module('dashboardcontroller', [])
 		}
 
 		$scope.changeTableStatus=function(index,tableNumber,restaurantId){
-			var postTable;
+			var postTable={};
+		
 			postTable.status=$scope.tablesObj[index].status;
 			postTable.tableNumber=tableNumber;
 			postTable.restaurantId=restaurantId;
 			Dashboard.changeTableStatus(postTable).then(function(data){
+
 				var tableObj=data.data;
+				console.log(tableObj);
+				
 				if(tableObj.status==0){
 					$scope.tablesObj[index].status=tableObj.table.status;
 
 
 				}else{
+					
 
 				}
 			})
@@ -96,6 +101,27 @@ angular.module('dashboardcontroller', [])
 			$scope.currentTable=number;
 
 
+
+		}
+
+		$scope.CancelOrder=function(orderID,index){
+
+			console.log(orderID,index);
+			Dashboard.deleteOrder(orderID).then(function(data){
+
+				var orderObj=data.data;
+				console.log(orderObj);
+
+				if(orderObj.status==0){
+					$scope.orders[index].cancelled=true;
+
+
+				}else{
+
+				}
+
+
+			})
 
 		}
 
@@ -126,7 +152,7 @@ angular.module('dashboardcontroller', [])
 				angular.forEach($scope.tablesObj,function(table,key){
 
 					if(newOrdersObj[table.table_number]){
-						if(table.ordersLength!=newOrdersObj[table.table_number].length){
+						if(table.ordersLength<newOrdersObj[table.table_number].length){
 							table.new=true;
 							table.ordersLength=newOrdersObj[table.table_number].length;
 

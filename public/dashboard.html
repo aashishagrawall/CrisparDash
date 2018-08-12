@@ -216,7 +216,7 @@
 
 
 								<div class="columns" ng-repeat="order in orders track by $index">
-									<div class="order-border">
+									<div class="order-border" ng-if=!order.cancelled>
 										<div class="order">
 											<div class="row">
 												<div class="col-sm-8">
@@ -244,7 +244,7 @@
 													</div>
 													<div class="col-sm-4">
 
-														<div class=" cancel-order" ng-click="">Cancel Order</div>
+														<div class=" cancel-order" ng-click="CancelOrder(order.id ,$index)">Cancel Order</div>
 
 													</div>
 

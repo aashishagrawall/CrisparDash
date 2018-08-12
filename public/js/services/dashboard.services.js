@@ -12,6 +12,10 @@ angular.module('dashboardservice', [])
 			},
 			changeTableStatus:function(details){
 				return $http.post('/changeTableStatus',details)
+			},
+			deleteOrder:function(details){
+				return $http.delete('/deleteOrder/' + details)
 			}
+
 		}
 	}]);
